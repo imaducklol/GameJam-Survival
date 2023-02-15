@@ -77,7 +77,12 @@ public class Movement : MonoBehaviour
 
     public void Fire(InputAction.CallbackContext context)
     {
-
+        if(context.started)
+        {
+            GameObject projectile = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            projectile.AddComponent<Rigidbody>();
+            projectile.GetComponent<Rigidbody>().AddForce(this.GetComponentInChildren<Camera>().transform.forward * 10000);
+        }
     }
 
     public float NormalizeAngles(float input)
