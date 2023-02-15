@@ -7,6 +7,9 @@ public class MovePlane : MonoBehaviour
     [SerializeField]
     GameObject player;
 
+
+    Vector3 pos;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,6 +19,8 @@ public class MovePlane : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = player.transform.position;
+        pos = player.transform.position;
+        pos.y = 0f;
+        transform.position = pos;
     }
 }
