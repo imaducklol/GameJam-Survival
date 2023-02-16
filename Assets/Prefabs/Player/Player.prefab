@@ -134,6 +134,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minLookAngleNorm: -90
   maxLookAngleNorm: 90
+  projectileVelocity: 5000
+  movementVelocity: 0.2
+  lookVelocity: 0.2
 --- !u!114 &1678315687034719222
 MonoBehaviour:
   m_ObjectHideFlags: 0
