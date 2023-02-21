@@ -21,32 +21,36 @@ public class GenerateRooms : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        const int numberOfOptions = 32;
+        const int numberOfOptions = 52;
 
         bool[] options;
         int count;
+        int k;
 
         blockOptions = new int[numberOfOptions,4] {
             { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 },
+            { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 },
+            { 1, 0, 0, 0 }, { 2, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 2, 0, 0 }, { 0, 1, 0, 0 }, { 0, 2, 0, 0 }, { 0, 1, 0, 0 }, { 0, 2, 0, 0 },
             { 1, 0, 0, 0 }, { 2, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 2, 0, 0 }, { 0, 1, 0, 0 }, { 0, 2, 0, 0 }, { 0, 1, 0, 0 }, { 0, 2, 0, 0 },
             { 1, 1, 0, 0 }, { 1, 1, 0, 0 }, { 0, 1, 1, 0 }, { 0, 1, 1, 0 }, { 0, 0, 1, 1 }, { 0, 0, 1, 1 }, { 1, 0, 0, 1 }, { 1, 0, 0, 1 },
-            { 1, 2, 0, 0 }, { 2, 1, 0, 0 }, { 0, 1, 2, 0 }, { 0, 2, 1, 0 }, { 0, 0, 1, 2 }, { 0, 0, 2, 1 }, { 2, 0, 0, 1 }, { 1, 0, 0, 2 }
+            { 1, 2, 0, 0 }, { 2, 1, 0, 0 }, { 0, 1, 2, 0 }, { 0, 2, 1, 0 }, { 0, 0, 1, 2 }, { 0, 0, 2, 1 }, { 2, 0, 0, 1 }, { 1, 0, 0, 2 },
+            { 2, 2, 0, 0 }, { 0, 2, 2, 0 }, { 0, 0, 2, 2 }, { 2, 0, 0, 2 }
         };
         size = 2 * radius + 1;
         grid = new Block[size, size];
-        for(int i = 0; i < size; i++) {
-            for(int j = 0; j < size; j++) {
+        for (int i = 0; i < size; i++)
+        {
+            for(int j = 0; j < size; j++)
+            {
                 options = new bool[numberOfOptions];
                 count = 0;
-                for (int k = 0; k < numberOfOptions; k++) {
+                for (k = 0; k < numberOfOptions; k++) {
                     options[k] = true;
-                    count++;
                     if (i > 0)
                     {
                         if(grid[i - 1, j].wallNums[0] != blockOptions[k,2])
                         {
                             options[k] = false;
-                            count--;
                         }
                     }
                     if (j > 0)
@@ -54,25 +58,28 @@ public class GenerateRooms : MonoBehaviour
                         if (grid[i, j - 1].wallNums[1] != blockOptions[k, 3])
                         {
                             options[k] = false;
-                            count--;
                         }
+                    }
+                    if(options[k])
+                    {
+                        count++;
                     }
                 }
                 int blockNum = Random.Range(0, count);
                 count = 0;
-                for(int k = 0; k < numberOfOptions; k++)
+                for(k = 0; k < numberOfOptions; k++)
                 {
                     if(options[k])
                     {
-                        count++;
-                        if(count == blockNum)
+                        if (count == blockNum)
                         {
-                            k = numberOfOptions;
+                            break;
                         }
+                        count++;
                     }
                 }
                 Vector3 pos = new Vector3(gridSize * (i - radius), 0f, gridSize * (j - radius));
-                grid[i, j] = new Block(this, blockOptions[0], pos);
+                grid[i, j] = new Block(this, getSubarray(blockOptions, k, 4), pos);
             }
         }
     }
@@ -81,5 +88,15 @@ public class GenerateRooms : MonoBehaviour
     void Update()
     {
         
+    }
+
+    int[] getSubarray(int[,] arr, int index, int size)
+    {
+        int[] subarray = new int[size];
+        for(int i = 0; i < size; i++)
+        {
+            subarray[i] = arr[index, i];
+        }
+        return subarray;
     }
 }

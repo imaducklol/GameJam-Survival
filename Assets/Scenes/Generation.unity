@@ -158,7 +158,7 @@ MonoBehaviour:
   wall: {fileID: 8930873865249337054, guid: 7898204b691bd4c19b0895a3886e7ddc, type: 3}
   wallWithDoor: {fileID: 67150838582911871, guid: 2bdbb077f9a0143c8b684582fcc63939, type: 3}
   gridSize: 4
-  radius: 1
+  radius: 6
 --- !u!4 &419302907
 Transform:
   m_ObjectHideFlags: 0
@@ -472,7 +472,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7807700264304236114, guid: 11a6a4c9df2fa4126ad69e0a6b692329, type: 3}
       propertyPath: m_LocalScale.x
-      value: 4
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7807700264304236114, guid: 11a6a4c9df2fa4126ad69e0a6b692329, type: 3}
       propertyPath: m_LocalScale.y
@@ -480,7 +480,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7807700264304236114, guid: 11a6a4c9df2fa4126ad69e0a6b692329, type: 3}
       propertyPath: m_LocalScale.z
-      value: 4
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7807700264304236114, guid: 11a6a4c9df2fa4126ad69e0a6b692329, type: 3}
       propertyPath: m_LocalPosition.x

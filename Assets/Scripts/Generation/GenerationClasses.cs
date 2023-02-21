@@ -20,9 +20,26 @@ public class Block
         offsets = new Vector3[4] { new Vector3(size, 0f, 0f), new Vector3(0f, 0f, size), new Vector3(-size, 0f, 0f), new Vector3(0f, 0f, -size) };
         for(int i = 0; i < 4; i++)
         {
-            corners[i] = Object.Instantiate(script.corner, script.transform);
-            corners[i].transform.position = position;
-            corners[i].transform.Rotate(0f, -90f * i, 0f);
+            bool createCorner = true;
+            if(i + 1 == 4)
+            {
+                if(walls[0] == 0 && walls[3] == 0)
+                {
+                    createCorner = false;
+                }
+            } else
+            {
+                if(walls[i] == 0 && walls[i + 1] == 0)
+                {
+                    createCorner = false;
+                }
+            }
+            if (createCorner)
+            {
+                corners[i] = Object.Instantiate(script.corner, script.transform);
+                corners[i].transform.position = position;
+                corners[i].transform.Rotate(0f, -90f * i, 0f);
+            }
             if(walls[i] == 0) {
                 this.walls[i] = Object.Instantiate(script.noWall, script.transform);
             } else if(walls[i] == 1) {
