@@ -13,7 +13,10 @@ public class MovePlane : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        GameObject playerInScene = GameObject.Find("Player");
+        if(playerInScene != null) {
+            player = playerInScene;
+        }
     }
 
     // Update is called once per frame
