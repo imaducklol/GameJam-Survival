@@ -32,6 +32,7 @@ public class GenerateRooms : MonoBehaviour
             player = playerInScene;
         }
 
+        gridCenter = player.transform.position;
 
         blockOptions = new int[numberOfOptions, 4] {
             { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 },
@@ -70,6 +71,7 @@ public class GenerateRooms : MonoBehaviour
     {
         if(player.transform.position.x - gridCenter.x > gridSize / 2f)
         {
+            gridCenter.x += gridSize;
             // Add row to beginning
             Block[] row = new Block[size];
             for(int i = 0; i < size; i++)
@@ -85,9 +87,10 @@ public class GenerateRooms : MonoBehaviour
                 row[i] = new Block(this, blockWalls, pos);
             }
             addFirstRow(row);
-            gridCenter.x += gridSize;
-        } else if (player.transform.position.x - gridCenter.x < -gridSize / 2f)
+        }
+        else if (player.transform.position.x - gridCenter.x < -gridSize / 2f)
         {
+            gridCenter.x -= gridSize;
             // Add row to end
             Block[] row = new Block[size];
             for (int i = 0; i < size; i++)
@@ -103,11 +106,49 @@ public class GenerateRooms : MonoBehaviour
                 row[i] = new Block(this, blockWalls, pos);
             }
             addLastRow(row);
-            gridCenter.x -= gridSize;
+        }
+
+        if (player.transform.position.z - gridCenter.z > gridSize / 2f)
+        {
+            gridCenter.z += gridSize;
+            // Add column to beginning
+            Block[] col = new Block[size];
+            for (int i = 0; i < size; i++)
+            {
+                inDirectionX = null;
+                inDirectionZ = grid[i, 0];
+                if (i != 0)
+                {
+                    inDirectionX = col[i - 1];
+                }
+                blockWalls = chooseBlock(inDirectionX, null, null, inDirectionZ);
+                Vector3 pos = new Vector3(gridSize * (radius - i) + gridCenter.x, 0f, gridSize * (radius) + gridCenter.z);
+                col[i] = new Block(this, blockWalls, pos);
+            }
+            addFirstColumn(col);
+        }
+        else if (player.transform.position.z - gridCenter.z < -gridSize / 2f)
+        {
+            gridCenter.z -= gridSize;
+            // Add column to end
+            Block[] col = new Block[size];
+            for (int i = 0; i < size; i++)
+            {
+                inDirectionX = null;
+                inDirectionZ = grid[i, size - 1];
+                if (i != 0)
+                {
+                    inDirectionX = col[i - 1];
+                }
+                blockWalls = chooseBlock(inDirectionX, inDirectionZ, null, null);
+                Vector3 pos = new Vector3(gridSize * (radius - i) + gridCenter.x, 0f, gridSize * (-radius) + gridCenter.z);
+                col[i] = new Block(this, blockWalls, pos);
+            }
+            addLastColumn(col);
         }
     }
 
-    int[] getSubarray(int[,] arr, int index, int size)
+    static int[] getSubarray(int[,] arr, int index, int size)
     {
         int[] subarray = new int[size];
         for(int i = 0; i < size; i++)
@@ -182,11 +223,11 @@ public class GenerateRooms : MonoBehaviour
         {
             grid[size - 1, i].destroyGameObjects();
         }
-        for(int i = size - 1; i > 0; i--)
+        for(int r = size - 1; r > 0; r--)
         {
-            for(int j = 0; j < size; j++)
+            for(int i = 0; i < size; i++)
             {
-                grid[i, j] = grid[i - 1, j];
+                grid[r, i] = grid[r - 1, i];
             }
         }
         for(int i = 0; i < size; i++)
@@ -201,16 +242,54 @@ public class GenerateRooms : MonoBehaviour
         {
             grid[0, i].destroyGameObjects();
         }
-        for (int i = 1; i < size; i++)
+        for (int r = 0; r < size - 1; r++)
         {
-            for (int j = 0; j < size; j++)
+            for (int i = 0; i < size; i++)
             {
-                grid[i - 1, j] = grid[i, j];
+                grid[r, i] = grid[r +  1, i];
             }
         }
         for (int i = 0; i < size; i++)
         {
             grid[size - 1, i] = row[i];
+        }
+    }
+
+    void addFirstColumn(Block[] col)
+    {
+        for (int i = 0; i < size; i++)
+        {
+            grid[i, size - 1].destroyGameObjects();
+        }
+        for (int c = size - 1; c > 0; c--)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                grid[i, c] = grid[i, c - 1];
+            }
+        }
+        for (int i = 0; i < size; i++)
+        {
+            grid[i, 0] = col[i];
+        }
+    }
+
+    void addLastColumn(Block[] col)
+    {
+        for (int i = 0; i < size; i++)
+        {
+            grid[i, 0].destroyGameObjects();
+        }
+        for (int c = 0; c < size - 1; c++)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                grid[i, c] = grid[i, c + 1];
+            }
+        }
+        for (int i = 0; i < size; i++)
+        {
+            grid[i, size - 1] = col[i];
         }
     }
 }
