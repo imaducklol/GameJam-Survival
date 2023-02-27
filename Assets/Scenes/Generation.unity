@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028331, g: 0.2257133, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028305, g: 0.22571313, b: 0.3069213, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -157,6 +157,7 @@ MonoBehaviour:
   noWall: {fileID: 8878624757446752722, guid: 0427abc8f066b433185afe56ede302d7, type: 3}
   wall: {fileID: 8930873865249337054, guid: 7898204b691bd4c19b0895a3886e7ddc, type: 3}
   wallWithDoor: {fileID: 67150838582911871, guid: 2bdbb077f9a0143c8b684582fcc63939, type: 3}
+  enemy: {fileID: 0}
   gridSize: 4
   radius: 6
 --- !u!4 &419302907
@@ -229,6 +230,10 @@ PrefabInstance:
     - target: {fileID: 1678315687034719219, guid: cda61ea72845dcb4d81d58a8a0a31c77, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1678315687034719220, guid: cda61ea72845dcb4d81d58a8a0a31c77, type: 3}
+      propertyPath: lookVelocity
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
