@@ -7,15 +7,27 @@ public class MovePlane : MonoBehaviour
     [SerializeField]
     GameObject player;
 
+    [SerializeField]
+    GameObject generator;
+
 
     Vector3 pos;
 
     // Start is called before the first frame update
     void Start()
     {
-        GameObject playerInScene = GameObject.Find("Player");
-        if(playerInScene != null) {
-            player = playerInScene;
+        if(player == null)
+        {
+            player = GameObject.Find("Player");
+        }
+        if(generator == null)
+        {
+            generator = GameObject.Find("Generation");
+        }
+        if(generator != null)
+        {
+            GenerateRooms script = generator.GetComponent<GenerateRooms>();
+            transform.localScale = new Vector3(script.radius + 1f, 1f, script.radius + 1f);
         }
     }
 
