@@ -10,19 +10,33 @@ public class GenerateRooms : MonoBehaviour
     public GameObject wall;
     public GameObject wallWithDoor;
 
+    [SerializeField]
+    GameObject enemy;
+
+    [SerializeField]
+    GameObject score;
+    TMPro.TMP_Text scoreText;
+    int scoreNum;
+
     public float gridSize;
     public int radius;
+
+    public float enemyChance;
 
     int size;
     Block inDirectionX;
     Block inDirectionZ;
     Block[,] grid;
 
-    const int numberOfOptions = 52;
+    List<GameObject> enemies;
+
+    const int numberOfOptions = 56;
     int[,] blockOptions;
     int[] blockWalls;
 
-    public Vector3 gridCenter;
+    Vector3 gridCenter;
+
+    bool sceneChange;
 
     // Start is called before the first frame update
     void Start()
@@ -37,14 +51,25 @@ public class GenerateRooms : MonoBehaviour
         blockOptions = new int[numberOfOptions, 4] {
             { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 },
-            { 1, 0, 0, 0 }, { 2, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 2, 0, 0 }, { 0, 1, 0, 0 }, { 0, 2, 0, 0 }, { 0, 1, 0, 0 }, { 0, 2, 0, 0 },
-            { 1, 0, 0, 0 }, { 2, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 2, 0, 0 }, { 0, 1, 0, 0 }, { 0, 2, 0, 0 }, { 0, 1, 0, 0 }, { 0, 2, 0, 0 },
-            { 1, 1, 0, 0 }, { 1, 1, 0, 0 }, { 0, 1, 1, 0 }, { 0, 1, 1, 0 }, { 0, 0, 1, 1 }, { 0, 0, 1, 1 }, { 1, 0, 0, 1 }, { 1, 0, 0, 1 },
-            { 1, 2, 0, 0 }, { 2, 1, 0, 0 }, { 0, 1, 2, 0 }, { 0, 2, 1, 0 }, { 0, 0, 1, 2 }, { 0, 0, 2, 1 }, { 2, 0, 0, 1 }, { 1, 0, 0, 2 },
-            { 2, 2, 0, 0 }, { 0, 2, 2, 0 }, { 0, 0, 2, 2 }, { 2, 0, 0, 2 }
+            { 1, 0, 0, 0 }, { 2, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 2, 0, 0 }, { 0, 0, 1, 0 }, { 0, 0, 2, 0 }, { 0, 0, 0, 1 }, { 0, 0, 0, 2 },
+            { 1, 0, 0, 0 }, { 2, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 2, 0, 0 }, { 0, 0, 1, 0 }, { 0, 0, 2, 0 }, { 0, 0, 0, 1 }, { 0, 0, 0, 2 },
+            { 1, 1, 0, 0 }, { 0, 1, 1, 0 }, { 0, 0, 1, 1 }, { 1, 0, 0, 1 }, { 1, 1, 0, 0 }, { 0, 1, 1, 0 }, { 0, 0, 1, 1 }, { 1, 0, 0, 1 },
+            { 1, 1, 0, 0 }, { 0, 1, 1, 0 }, { 0, 0, 1, 1 }, { 1, 0, 0, 1 }, { 2, 2, 0, 0 }, { 0, 2, 2, 0 }, { 0, 0, 2, 2 }, { 2, 0, 0, 2 },
+            { 1, 2, 0, 0 }, { 2, 1, 0, 0 }, { 0, 1, 2, 0 }, { 0, 2, 1, 0 }, { 0, 0, 1, 2 }, { 0, 0, 2, 1 }, { 2, 0, 0, 1 }, { 1, 0, 0, 2 }
         };
+
         size = 2 * radius + 1;
         grid = new Block[size, size];
+
+        enemies = new List<GameObject>();
+
+        if(score == null)
+        {
+            score = GameObject.Find("Canvas").transform.GetChild(0).gameObject;
+        }
+        scoreText = score.GetComponent<TMPro.TMP_Text>();
+        scoreNum = 0;
+
         for (int i = 0; i < size; i++)
         {
             for(int j = 0; j < size; j++)
@@ -69,6 +94,7 @@ public class GenerateRooms : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        sceneChange = false;
         if(player.transform.position.x - gridCenter.x > gridSize / 2f)
         {
             gridCenter.x += gridSize;
@@ -87,6 +113,7 @@ public class GenerateRooms : MonoBehaviour
                 row[i] = new Block(this, blockWalls, pos);
             }
             addFirstRow(row);
+            sceneChange = true;
         }
         else if (player.transform.position.x - gridCenter.x < -gridSize / 2f)
         {
@@ -106,6 +133,7 @@ public class GenerateRooms : MonoBehaviour
                 row[i] = new Block(this, blockWalls, pos);
             }
             addLastRow(row);
+            sceneChange = true;
         }
 
         if (player.transform.position.z - gridCenter.z > gridSize / 2f)
@@ -126,6 +154,7 @@ public class GenerateRooms : MonoBehaviour
                 col[i] = new Block(this, blockWalls, pos);
             }
             addFirstColumn(col);
+            sceneChange = true;
         }
         else if (player.transform.position.z - gridCenter.z < -gridSize / 2f)
         {
@@ -145,6 +174,13 @@ public class GenerateRooms : MonoBehaviour
                 col[i] = new Block(this, blockWalls, pos);
             }
             addLastColumn(col);
+            sceneChange = true;
+        }
+        if(sceneChange)
+        {
+            scoreNum += 10;
+            scoreText.text = "Score: " + scoreNum.ToString();
+            // Call mesh update function here
         }
     }
 
@@ -219,6 +255,7 @@ public class GenerateRooms : MonoBehaviour
 
     void addFirstRow(Block[] row)
     {
+        // Delete old row, add  new one
         for(int i = 0; i < size; i++)
         {
             grid[size - 1, i].destroyGameObjects();
@@ -233,6 +270,23 @@ public class GenerateRooms : MonoBehaviour
         for(int i = 0; i < size; i++)
         {
             grid[0, i] = row[i];
+        }
+        // Move enemies
+        foreach(GameObject e in enemies)
+        {
+            if(e.transform.position.x < gridCenter.x - ((radius + 0.5f) * gridSize))
+            {
+                Vector3 newPos = e.transform.position;
+                newPos.x = gridCenter.x + (radius * gridSize);
+                e.transform.position = newPos;
+            }
+        }
+        // Spawn enemies
+        if(Random.value < enemyChance)
+        {
+            GameObject e = Instantiate(enemy);
+            e.transform.position = gridCenter + new Vector3(radius * gridSize, 0f, Random.Range(-radius, radius + 1) * gridSize);
+            enemies.Add(e);
         }
     }
 
@@ -253,6 +307,23 @@ public class GenerateRooms : MonoBehaviour
         {
             grid[size - 1, i] = row[i];
         }
+        // Move enemies
+        foreach (GameObject e in enemies)
+        {
+            if (e.transform.position.x > gridCenter.x + ((radius + 0.5f) * gridSize))
+            {
+                Vector3 newPos = e.transform.position;
+                newPos.x = gridCenter.x - (radius * gridSize);
+                e.transform.position = newPos;
+            }
+        }
+        // Spawn enemies
+        if (Random.value < enemyChance)
+        {
+            GameObject e = Instantiate(enemy);
+            e.transform.position = gridCenter + new Vector3(-radius * gridSize, 0f, Random.Range(-radius, radius + 1) * gridSize);
+            enemies.Add(e);
+        }
     }
 
     void addFirstColumn(Block[] col)
@@ -272,6 +343,23 @@ public class GenerateRooms : MonoBehaviour
         {
             grid[i, 0] = col[i];
         }
+        // Move enemies
+        foreach (GameObject e in enemies)
+        {
+            if (e.transform.position.z < gridCenter.z - ((radius + 0.5f) * gridSize))
+            {
+                Vector3 newPos = e.transform.position;
+                newPos.z = gridCenter.z + (radius * gridSize);
+                e.transform.position = newPos;
+            }
+        }
+        // Spawn enemies
+        if (Random.value < enemyChance)
+        {
+            GameObject e = Instantiate(enemy);
+            e.transform.position = gridCenter + new Vector3(Random.Range(-radius, radius + 1) * gridSize, 0f, radius * gridSize);
+            enemies.Add(e);
+        }
     }
 
     void addLastColumn(Block[] col)
@@ -290,6 +378,23 @@ public class GenerateRooms : MonoBehaviour
         for (int i = 0; i < size; i++)
         {
             grid[i, size - 1] = col[i];
+        }
+        // Move enemies
+        foreach (GameObject e in enemies)
+        {
+            if (e.transform.position.z > gridCenter.z + ((radius + 0.5f) * gridSize))
+            {
+                Vector3 newPos = e.transform.position;
+                newPos.z = gridCenter.z - (radius * gridSize);
+                e.transform.position = newPos;
+            }
+        }
+        // Spawn enemies
+        if (Random.value < enemyChance)
+        {
+            GameObject e = Instantiate(enemy);
+            e.transform.position = gridCenter + new Vector3(Random.Range(-radius, radius + 1) * gridSize, 0f, -radius * gridSize);
+            enemies.Add(e);
         }
     }
 }
