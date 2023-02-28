@@ -159,6 +159,7 @@ MonoBehaviour:
   wallWithDoor: {fileID: 67150838582911871, guid: 2bdbb077f9a0143c8b684582fcc63939, type: 3}
   gridSize: 4
   radius: 6
+  gridCenter: {x: 0, y: 0, z: 0}
 --- !u!4 &419302907
 Transform:
   m_ObjectHideFlags: 0
