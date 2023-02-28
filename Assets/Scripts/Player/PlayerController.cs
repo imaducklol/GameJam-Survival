@@ -87,10 +87,11 @@ public class PlayerController : MonoBehaviour
         if(context.started)
         {
             GameObject projectile = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            Camera cam = this.GetComponentInChildren<Camera>();
             projectile.AddComponent<Rigidbody>();
             projectile.AddComponent<Ballz>();
-            projectile.transform.position = this.GetComponentInChildren<Camera>().transform.position;
-            projectile.GetComponent<Rigidbody>().AddForce(this.GetComponentInChildren<Camera>().transform.forward * projectileVelocity);
+            projectile.transform.position = cam.transform.position + cam.transform.forward;
+            projectile.GetComponent<Rigidbody>().AddForce(cam.transform.forward * projectileVelocity);
         }
     }
 
