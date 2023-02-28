@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float movementVelocity;
     [SerializeField]
-    private float lookVelocity;
+    private Vector2 lookVelocity;
 
     private CharacterController characterController;
     private Vector3 movement;

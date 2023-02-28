@@ -59,8 +59,14 @@ public class Block
     {
         for(int i = 0; i < 4; i++)
         {
-            Object.Destroy(corners[i]);
-            Object.Destroy(walls[i]);
+            if (corners[i] != null)
+            {
+                Object.Destroy(corners[i]);
+            }
+            if(walls[i] != null)
+            {
+                Object.Destroy(walls[i]);
+            }
         }
     }
 }

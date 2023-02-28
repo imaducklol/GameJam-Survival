@@ -14,20 +14,27 @@ public class GenerateRooms : MonoBehaviour
     public int radius;
 
     int size;
+    Block inDirectionX;
+    Block inDirectionZ;
     Block[,] grid;
 
+    const int numberOfOptions = 52;
     int[,] blockOptions;
+    int[] blockWalls;
+
+    public Vector3 gridCenter;
 
     // Start is called before the first frame update
     void Start()
     {
-        const int numberOfOptions = 52;
+        GameObject playerInScene = GameObject.Find("Player");
+        if(playerInScene != null) {
+            player = playerInScene;
+        }
 
-        bool[] options;
-        int count;
-        int k;
+        gridCenter = player.transform.position;
 
-        blockOptions = new int[numberOfOptions,4] {
+        blockOptions = new int[numberOfOptions, 4] {
             { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 },
             { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 },
             { 1, 0, 0, 0 }, { 2, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 2, 0, 0 }, { 0, 1, 0, 0 }, { 0, 2, 0, 0 }, { 0, 1, 0, 0 }, { 0, 2, 0, 0 },
@@ -42,44 +49,19 @@ public class GenerateRooms : MonoBehaviour
         {
             for(int j = 0; j < size; j++)
             {
-                options = new bool[numberOfOptions];
-                count = 0;
-                for (k = 0; k < numberOfOptions; k++) {
-                    options[k] = true;
-                    if (i > 0)
-                    {
-                        if(grid[i - 1, j].wallNums[0] != blockOptions[k,2])
-                        {
-                            options[k] = false;
-                        }
-                    }
-                    if (j > 0)
-                    {
-                        if (grid[i, j - 1].wallNums[1] != blockOptions[k, 3])
-                        {
-                            options[k] = false;
-                        }
-                    }
-                    if(options[k])
-                    {
-                        count++;
-                    }
-                }
-                int blockNum = Random.Range(0, count);
-                count = 0;
-                for(k = 0; k < numberOfOptions; k++)
+                inDirectionX = null;
+                inDirectionZ = null;
+                if(i != 0)
                 {
-                    if(options[k])
-                    {
-                        if (count == blockNum)
-                        {
-                            break;
-                        }
-                        count++;
-                    }
+                    inDirectionX = grid[i - 1, j];
+                } 
+                if (j != 0)
+                {
+                    inDirectionZ = grid[i, j - 1];
                 }
-                Vector3 pos = new Vector3(gridSize * (i - radius), 0f, gridSize * (j - radius));
-                grid[i, j] = new Block(this, getSubarray(blockOptions, k, 4), pos);
+                blockWalls = chooseBlock(inDirectionX, inDirectionZ, null, null);
+                Vector3 pos = new Vector3(gridSize * (radius - i) + gridCenter.x, 0f, gridSize * (radius - j) + gridCenter.z);
+                grid[i, j] = new Block(this, blockWalls, pos);
             }
         }
     }
@@ -87,10 +69,86 @@ public class GenerateRooms : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(player.transform.position.x - gridCenter.x > gridSize / 2f)
+        {
+            gridCenter.x += gridSize;
+            // Add row to beginning
+            Block[] row = new Block[size];
+            for(int i = 0; i < size; i++)
+            {
+                inDirectionX = grid[0, i];
+                inDirectionZ = null;
+                if(i != 0)
+                {
+                    inDirectionZ = row[i - 1];
+                }
+                blockWalls = chooseBlock(null, inDirectionZ, inDirectionX, null);
+                Vector3 pos = new Vector3(gridSize * (radius) + gridCenter.x, 0f, gridSize * (radius - i) + gridCenter.z);
+                row[i] = new Block(this, blockWalls, pos);
+            }
+            addFirstRow(row);
+        }
+        else if (player.transform.position.x - gridCenter.x < -gridSize / 2f)
+        {
+            gridCenter.x -= gridSize;
+            // Add row to end
+            Block[] row = new Block[size];
+            for (int i = 0; i < size; i++)
+            {
+                inDirectionX = grid[size - 1, i];
+                inDirectionZ = null;
+                if (i != 0)
+                {
+                    inDirectionZ = row[i - 1];
+                }
+                blockWalls = chooseBlock(inDirectionX, inDirectionZ, null, null);
+                Vector3 pos = new Vector3(gridSize * (-radius) + gridCenter.x, 0f, gridSize * (radius - i) + gridCenter.z);
+                row[i] = new Block(this, blockWalls, pos);
+            }
+            addLastRow(row);
+        }
+
+        if (player.transform.position.z - gridCenter.z > gridSize / 2f)
+        {
+            gridCenter.z += gridSize;
+            // Add column to beginning
+            Block[] col = new Block[size];
+            for (int i = 0; i < size; i++)
+            {
+                inDirectionX = null;
+                inDirectionZ = grid[i, 0];
+                if (i != 0)
+                {
+                    inDirectionX = col[i - 1];
+                }
+                blockWalls = chooseBlock(inDirectionX, null, null, inDirectionZ);
+                Vector3 pos = new Vector3(gridSize * (radius - i) + gridCenter.x, 0f, gridSize * (radius) + gridCenter.z);
+                col[i] = new Block(this, blockWalls, pos);
+            }
+            addFirstColumn(col);
+        }
+        else if (player.transform.position.z - gridCenter.z < -gridSize / 2f)
+        {
+            gridCenter.z -= gridSize;
+            // Add column to end
+            Block[] col = new Block[size];
+            for (int i = 0; i < size; i++)
+            {
+                inDirectionX = null;
+                inDirectionZ = grid[i, size - 1];
+                if (i != 0)
+                {
+                    inDirectionX = col[i - 1];
+                }
+                blockWalls = chooseBlock(inDirectionX, inDirectionZ, null, null);
+                Vector3 pos = new Vector3(gridSize * (radius - i) + gridCenter.x, 0f, gridSize * (-radius) + gridCenter.z);
+                col[i] = new Block(this, blockWalls, pos);
+            }
+            addLastColumn(col);
+        }
     }
 
-    int[] getSubarray(int[,] arr, int index, int size)
+    static int[] getSubarray(int[,] arr, int index, int size)
     {
         int[] subarray = new int[size];
         for(int i = 0; i < size; i++)
@@ -98,5 +156,140 @@ public class GenerateRooms : MonoBehaviour
             subarray[i] = arr[index, i];
         }
         return subarray;
+    }
+
+    int[] chooseBlock(Block positiveX, Block positiveZ, Block negativeX, Block negativeZ)
+    {
+        bool[] options = new bool[numberOfOptions];
+        int count = 0;
+        int k;
+        for (k = 0; k < numberOfOptions; k++)
+        {
+            options[k] = true;
+            if (positiveX != null)
+            {
+                if (positiveX.wallNums[2] != blockOptions[k, 0])
+                {
+                    options[k] = false;
+                }
+            }
+            if (positiveZ != null)
+            {
+                if (positiveZ.wallNums[3] != blockOptions[k, 1])
+                {
+                    options[k] = false;
+                }
+            }
+            if (negativeX != null)
+            {
+                if (negativeX.wallNums[0] != blockOptions[k, 2])
+                {
+                    options[k] = false;
+                }
+            }
+            if (negativeZ != null)
+            {
+                if (negativeZ.wallNums[1] != blockOptions[k, 3])
+                {
+                    options[k] = false;
+                }
+            }
+            if (options[k])
+            {
+                count++;
+            }
+        }
+
+        int blockNum = Random.Range(0, count);
+        count = 0;
+        for (k = 0; k < numberOfOptions; k++)
+        {
+            if (options[k])
+            {
+                if (count == blockNum)
+                {
+                    break;
+                }
+                count++;
+            }
+        }
+
+        return getSubarray(blockOptions, k, 4);
+    }
+
+    void addFirstRow(Block[] row)
+    {
+        for(int i = 0; i < size; i++)
+        {
+            grid[size - 1, i].destroyGameObjects();
+        }
+        for(int r = size - 1; r > 0; r--)
+        {
+            for(int i = 0; i < size; i++)
+            {
+                grid[r, i] = grid[r - 1, i];
+            }
+        }
+        for(int i = 0; i < size; i++)
+        {
+            grid[0, i] = row[i];
+        }
+    }
+
+    void addLastRow(Block[] row)
+    {
+        for (int i = 0; i < size; i++)
+        {
+            grid[0, i].destroyGameObjects();
+        }
+        for (int r = 0; r < size - 1; r++)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                grid[r, i] = grid[r +  1, i];
+            }
+        }
+        for (int i = 0; i < size; i++)
+        {
+            grid[size - 1, i] = row[i];
+        }
+    }
+
+    void addFirstColumn(Block[] col)
+    {
+        for (int i = 0; i < size; i++)
+        {
+            grid[i, size - 1].destroyGameObjects();
+        }
+        for (int c = size - 1; c > 0; c--)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                grid[i, c] = grid[i, c - 1];
+            }
+        }
+        for (int i = 0; i < size; i++)
+        {
+            grid[i, 0] = col[i];
+        }
+    }
+
+    void addLastColumn(Block[] col)
+    {
+        for (int i = 0; i < size; i++)
+        {
+            grid[i, 0].destroyGameObjects();
+        }
+        for (int c = 0; c < size - 1; c++)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                grid[i, c] = grid[i, c + 1];
+            }
+        }
+        for (int i = 0; i < size; i++)
+        {
+            grid[i, size - 1] = col[i];
+        }
     }
 }
