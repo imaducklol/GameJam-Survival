@@ -36,7 +36,7 @@ Transform:
   m_Children:
   - {fileID: 1678315687122395890}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1678315687034719218
 MeshFilter:
@@ -132,11 +132,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c37f2b8e94ea8b4f93d9f9bfbe982d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minLookAngleNorm: -90
-  maxLookAngleNorm: 90
+  minLookAngleNorm: -80
+  maxLookAngleNorm: 80
   projectileVelocity: 5000
   movementVelocity: 0.2
-  lookVelocity: 0.2
+  lookVelocity: {x: 0, y: 0}
 --- !u!114 &1678315687034719222
 MonoBehaviour:
   m_ObjectHideFlags: 0
