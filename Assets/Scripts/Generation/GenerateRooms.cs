@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using Pathfinding;
+
 public class GenerateRooms : MonoBehaviour
 {
     public GameObject player;
@@ -278,7 +280,7 @@ public class GenerateRooms : MonoBehaviour
             {
                 Vector3 newPos = e.transform.position;
                 newPos.x = gridCenter.x + (radius * gridSize);
-                e.transform.position = newPos;
+                e.GetComponent<AIPath>().Teleport(newPos);
             }
         }
         // Spawn enemies
@@ -314,7 +316,7 @@ public class GenerateRooms : MonoBehaviour
             {
                 Vector3 newPos = e.transform.position;
                 newPos.x = gridCenter.x - (radius * gridSize);
-                e.transform.position = newPos;
+                e.GetComponent<AIPath>().Teleport(newPos);
             }
         }
         // Spawn enemies
@@ -350,7 +352,7 @@ public class GenerateRooms : MonoBehaviour
             {
                 Vector3 newPos = e.transform.position;
                 newPos.z = gridCenter.z + (radius * gridSize);
-                e.transform.position = newPos;
+                e.GetComponent<AIPath>().Teleport(newPos);
             }
         }
         // Spawn enemies
@@ -386,7 +388,7 @@ public class GenerateRooms : MonoBehaviour
             {
                 Vector3 newPos = e.transform.position;
                 newPos.z = gridCenter.z - (radius * gridSize);
-                e.transform.position = newPos;
+                e.GetComponent<AIPath>().Teleport(newPos);
             }
         }
         // Spawn enemies
