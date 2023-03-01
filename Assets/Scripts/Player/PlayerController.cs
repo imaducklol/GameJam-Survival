@@ -15,16 +15,20 @@ public class PlayerController : MonoBehaviour
     private float movementVelocity;
     [SerializeField]
     private Vector2 lookVelocity;
+    [SerializeField]
+    private int startingHealth;
 
     private CharacterController characterController;
     private Vector3 movement;
     private Vector2 looking;
     private Camera cam;
     private float angle;
-    
+    private int health;
+
     // Start is called before the first frame update
     void Start()
     {
+        health = startingHealth;
         characterController = GetComponent<CharacterController>();
         movement = Vector2.zero;
         cam = GetComponentInChildren<Camera>();
@@ -35,7 +39,10 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if(health == 0)
+        {
+            Kill();
+        }
     }
 
     private void FixedUpdate()
@@ -99,5 +106,18 @@ public class PlayerController : MonoBehaviour
     public float NormalizeAngles(float input)
     {
         return -(input - 180f - Mathf.Sign(input - 180f) * 180f);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.collider.transform.gameObject.tag == "Enemy")
+        {
+            health -= 1;
+        }
+    }
+
+    private void Kill()
+    {
+
     }
 }
