@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
-
 using Pathfinding;
 
 public class GenerateRooms : MonoBehaviour
@@ -14,6 +14,9 @@ public class GenerateRooms : MonoBehaviour
 
     [SerializeField]
     GameObject enemy;
+
+    private float timer;
+    [SerializeField] private float timePerAddedEnemyHealth;
 
     [SerializeField]
     GameObject score;
@@ -30,7 +33,9 @@ public class GenerateRooms : MonoBehaviour
     Block inDirectionZ;
     Block[,] grid;
 
-    List<GameObject> enemies;
+    private List<GameObject> enemies;
+    private List<GameObject> enemiesToRemove;
+    private List<GameObject> enemiesToAdd;
 
     const int numberOfOptions = 56;
     int[,] blockOptions;
@@ -91,11 +96,23 @@ public class GenerateRooms : MonoBehaviour
                 grid[i, j] = new Block(this, blockWalls, pos);
             }
         }
+        AstarPath.active.Scan();
     }
 
     // Update is called once per frame
     void Update()
     {
+        timer += Time.deltaTime;
+
+        foreach (GameObject e in enemiesToRemove)
+        {
+            enemies.Remove(e);
+            Destroy(e);
+        }
+        foreach (GameObject e in enemiesToAdd) enemies.Add(e);
+        enemiesToRemove.Clear();
+        enemiesToAdd.Clear();
+
         sceneChange = false;
         if(player.transform.position.x - gridCenter.x > gridSize / 2f)
         {
@@ -182,7 +199,8 @@ public class GenerateRooms : MonoBehaviour
         {
             scoreNum += 10;
             scoreText.text = "Score: " + scoreNum.ToString();
-            // Call mesh update function here
+            // Call mesh update function here can do
+            AstarPath.active.Scan();
         }
     }
 
@@ -280,14 +298,16 @@ public class GenerateRooms : MonoBehaviour
             {
                 Vector3 newPos = e.transform.position;
                 newPos.x = gridCenter.x + (radius * gridSize);
-                e.GetComponent<AIPath>().Teleport(newPos);
+                moveEnemy(e, newPos);
             }
         }
         // Spawn enemies
         if(Random.value < enemyChance)
         {
             GameObject e = Instantiate(enemy);
-            e.transform.position = gridCenter + new Vector3(radius * gridSize, 0f, Random.Range(-radius, radius + 1) * gridSize);
+            //e.transform.position = gridCenter + new Vector3(radius * gridSize, 0f, Random.Range(-radius, radius + 1) * gridSize);
+            e.GetComponent<AIPath>().Teleport(gridCenter + new Vector3(radius * gridSize, 0f, Random.Range(-radius, radius + 1) * gridSize));
+            e.GetComponent<AIDestinationSetter>().target = player.transform;
             enemies.Add(e);
         }
     }
@@ -316,14 +336,16 @@ public class GenerateRooms : MonoBehaviour
             {
                 Vector3 newPos = e.transform.position;
                 newPos.x = gridCenter.x - (radius * gridSize);
-                e.GetComponent<AIPath>().Teleport(newPos);
+                moveEnemy(e, newPos);
             }
         }
         // Spawn enemies
         if (Random.value < enemyChance)
         {
             GameObject e = Instantiate(enemy);
-            e.transform.position = gridCenter + new Vector3(-radius * gridSize, 0f, Random.Range(-radius, radius + 1) * gridSize);
+            //e.transform.position = gridCenter + new Vector3(-radius * gridSize, 0f, Random.Range(-radius, radius + 1) * gridSize);
+            e.GetComponent<AIPath>().Teleport(gridCenter + new Vector3(radius * gridSize, 0f, Random.Range(-radius, radius + 1) * gridSize));
+            e.GetComponent<AIDestinationSetter>().target = player.transform;
             enemies.Add(e);
         }
     }
@@ -352,14 +374,16 @@ public class GenerateRooms : MonoBehaviour
             {
                 Vector3 newPos = e.transform.position;
                 newPos.z = gridCenter.z + (radius * gridSize);
-                e.GetComponent<AIPath>().Teleport(newPos);
+                moveEnemy(e, newPos);
             }
         }
         // Spawn enemies
         if (Random.value < enemyChance)
         {
             GameObject e = Instantiate(enemy);
-            e.transform.position = gridCenter + new Vector3(Random.Range(-radius, radius + 1) * gridSize, 0f, radius * gridSize);
+            //e.transform.position = gridCenter + new Vector3(Random.Range(-radius, radius + 1) * gridSize, 0f, radius * gridSize);
+            e.GetComponent<AIPath>().Teleport(gridCenter + new Vector3(radius * gridSize, 0f, Random.Range(-radius, radius + 1) * gridSize));
+            e.GetComponent<AIDestinationSetter>().target = player.transform;
             enemies.Add(e);
         }
     }
@@ -388,15 +412,28 @@ public class GenerateRooms : MonoBehaviour
             {
                 Vector3 newPos = e.transform.position;
                 newPos.z = gridCenter.z - (radius * gridSize);
-                e.GetComponent<AIPath>().Teleport(newPos);
+                moveEnemy(e, newPos);
             }
         }
         // Spawn enemies
         if (Random.value < enemyChance)
         {
             GameObject e = Instantiate(enemy);
-            e.transform.position = gridCenter + new Vector3(Random.Range(-radius, radius + 1) * gridSize, 0f, -radius * gridSize);
+            //e.transform.position = gridCenter + new Vector3(Random.Range(-radius, radius + 1) * gridSize, 0f, -radius * gridSize);
+            e.GetComponent<AIPath>().Teleport(gridCenter + new Vector3(radius * gridSize, 0f, Random.Range(-radius, radius + 1) * gridSize));
+            e.GetComponent<AIDestinationSetter>().target = player.transform;
+            //e.GetComponent<EnemyHealth>().health = ((int)(timer / timePerAddedEnemyHealth) + 1);
             enemies.Add(e);
         }
+    }
+
+    void moveEnemy(GameObject e, Vector3 pos)
+    {
+        //int health = e.GetComponent<EnemyHealth>().health;
+        enemiesToRemove.Add(e);
+        GameObject a = Instantiate(enemy);
+        a.GetComponent<AIPath>().Teleport(pos);
+        //e.GetComponent<EnemyHealth>().health = health;
+        enemiesToAdd.Add(a);
     }
 }

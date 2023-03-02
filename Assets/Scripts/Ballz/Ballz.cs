@@ -4,23 +4,12 @@ using UnityEngine;
 
 public class Ballz : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+private void OnTriggerEnter(Collider collision)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if(collision.gameObject.GetComponent<PlayerController>() == null)
+        if(collision.gameObject.CompareTag("Enemy"))
         {
-            Destroy(gameObject);
+            collision.gameObject.GetComponent<EnemyHealth>().health -= 1;
         }
+        Destroy(gameObject);
     }
 }

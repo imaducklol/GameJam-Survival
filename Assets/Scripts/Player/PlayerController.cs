@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,10 @@ public class PlayerController : MonoBehaviour
     private float maxLookAngleNorm;
     [SerializeField]
     private float projectileVelocity;
+    [SerializeField] 
+    private float projectilesPerSecond;
+    [SerializeField] 
+    private float regenPerSecond;
     [SerializeField]
     private float movementVelocity;
     [SerializeField]
@@ -23,7 +28,15 @@ public class PlayerController : MonoBehaviour
     private Vector2 looking;
     private Camera cam;
     private float angle;
-    private int health;
+    public int health;
+    private float regenTimer = 0;
+    private float projectileTimer = 0;
+
+    [SerializeField] 
+    private GameObject bulletPrefab;
+    public GameObject healthDisplay;
+    public GameObject deathDisplay;
+    public TMPro.TMP_Text healthString;
 
     // Start is called before the first frame update
     void Start()
@@ -34,12 +47,25 @@ public class PlayerController : MonoBehaviour
         cam = GetComponentInChildren<Camera>();
         angle = cam.transform.localEulerAngles.x;
         Cursor.lockState = CursorLockMode.Locked;
+        
+        healthString = healthDisplay.GetComponent<TMPro.TMP_Text>();
+        healthString.text = "Health: " + health;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(health == 0)
+        projectileTimer += Time.deltaTime;
+        if (health < startingHealth && health > 0) regenTimer += Time.deltaTime;
+
+        if (regenTimer > 1 / regenPerSecond && health < startingHealth)
+        {
+            health += 1;
+            healthString.text = "Health: " + health;
+            regenTimer = 0;
+        }
+        
+        if(health < 1)
         {
             Kill();
         }
@@ -91,15 +117,13 @@ public class PlayerController : MonoBehaviour
 
     public void Fire(InputAction.CallbackContext context)
     {
-        if(context.started)
+        if(context.started && projectileTimer > 1/projectilesPerSecond)
         {
-            GameObject projectile = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            projectile.transform.parent = transform;
-            Camera cam = this.GetComponentInChildren<Camera>();
-            projectile.AddComponent<Rigidbody>();
-            projectile.AddComponent<Ballz>();
-            projectile.transform.position = cam.transform.position + cam.transform.forward;
-            projectile.GetComponent<Rigidbody>().AddForce(cam.transform.forward * projectileVelocity);
+            projectileTimer = 0;
+            Vector3 performanceCam = cam.transform.forward;
+            GameObject projectile = Instantiate(bulletPrefab);
+            projectile.transform.position = cam.transform.position + performanceCam;
+            projectile.GetComponent<Rigidbody>().AddForce(performanceCam * projectileVelocity);
         }
     }
 
@@ -108,16 +132,12 @@ public class PlayerController : MonoBehaviour
         return -(input - 180f - Mathf.Sign(input - 180f) * 180f);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    public void Kill()
     {
-        if(collision.collider.transform.gameObject.tag == "Enemy")
-        {
-            health -= 1;
-        }
-    }
-
-    private void Kill()
-    {
-
+        deathDisplay.SetActive(true);
+        movementVelocity = .001f;
+        projectileTimer = 0;
+        lookVelocity = new Vector2(lookVelocity.x * .5f, lookVelocity.y *.5f);
+        Debug.Log("Died");
     }
 }
