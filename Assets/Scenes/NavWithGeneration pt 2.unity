@@ -255,6 +255,7 @@ MonoBehaviour:
   wallWithDoor: {fileID: 67150838582911871, guid: 2bdbb077f9a0143c8b684582fcc63939, type: 3}
   enemy: {fileID: 3923578652827398850, guid: 0228894efb1bbc853b975192645f27e7, type: 3}
   timePerAddedEnemyHealth: 20
+  scorePerAddedEnemyHealth: 500
   score: {fileID: 0}
   gridSize: 4
   radius: 8
