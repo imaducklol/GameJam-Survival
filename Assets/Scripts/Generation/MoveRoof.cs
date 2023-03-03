@@ -27,7 +27,7 @@ public class MoveRoof : MonoBehaviour
         if(generator != null)
         {
             GenerateRooms script = generator.GetComponent<GenerateRooms>();
-            transform.localScale = new Vector3(script.radius + 1f, 1f, script.radius + 1f);
+            transform.localScale = new Vector3(script.radius*10 + 1f, .05f, script.radius*10 + 1f);
         }
     }
 
