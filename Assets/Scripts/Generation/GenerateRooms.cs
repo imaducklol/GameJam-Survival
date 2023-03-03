@@ -306,7 +306,7 @@ public class GenerateRooms : MonoBehaviour
         {
             GameObject e = Instantiate(enemy);
             //e.transform.position = gridCenter + new Vector3(radius * gridSize, 0f, Random.Range(-radius, radius + 1) * gridSize);
-            e.GetComponent<AIPath>().Teleport(gridCenter + new Vector3(radius * gridSize, 0f, Random.Range(-radius, radius + 1) * gridSize));
+            e.GetComponent<AIPath>().Teleport(gridCenter + new Vector3(radius * gridSize, -1f, Random.Range(-radius, radius + 1) * gridSize));
             e.GetComponent<AIDestinationSetter>().target = player.transform;
             e.GetComponentInChildren<EnemyHealth>().health = ((int)(scoreNum / scorePerAddedEnemyHealth) + 1);
             enemies.Add(e);
@@ -345,7 +345,7 @@ public class GenerateRooms : MonoBehaviour
         {
             GameObject e = Instantiate(enemy);
             //e.transform.position = gridCenter + new Vector3(-radius * gridSize, 0f, Random.Range(-radius, radius + 1) * gridSize);
-            e.GetComponent<AIPath>().Teleport(gridCenter + new Vector3(radius * gridSize, 0f, Random.Range(-radius, radius + 1) * gridSize));
+            e.GetComponent<AIPath>().Teleport(gridCenter + new Vector3(radius * gridSize, -1f, Random.Range(-radius, radius + 1) * gridSize));
             e.GetComponent<AIDestinationSetter>().target = player.transform;
             e.GetComponentInChildren<EnemyHealth>().health = ((int)(scoreNum / scorePerAddedEnemyHealth) + 1);
             enemies.Add(e);
@@ -384,7 +384,7 @@ public class GenerateRooms : MonoBehaviour
         {
             GameObject e = Instantiate(enemy);
             //e.transform.position = gridCenter + new Vector3(Random.Range(-radius, radius + 1) * gridSize, 0f, radius * gridSize);
-            e.GetComponent<AIPath>().Teleport(gridCenter + new Vector3(radius * gridSize, 0f, Random.Range(-radius, radius + 1) * gridSize));
+            e.GetComponent<AIPath>().Teleport(gridCenter + new Vector3(radius * gridSize, -1f, Random.Range(-radius, radius + 1) * gridSize));
             e.GetComponent<AIDestinationSetter>().target = player.transform;
             e.GetComponentInChildren<EnemyHealth>().health = ((int)(scoreNum / scorePerAddedEnemyHealth) + 1);
             enemies.Add(e);
@@ -423,7 +423,7 @@ public class GenerateRooms : MonoBehaviour
         {
             GameObject e = Instantiate(enemy);
             //e.transform.position = gridCenter + new Vector3(Random.Range(-radius, radius + 1) * gridSize, 0f, -radius * gridSize);
-            e.GetComponent<AIPath>().Teleport(gridCenter + new Vector3(radius * gridSize, 0f, Random.Range(-radius, radius + 1) * gridSize));
+            e.GetComponent<AIPath>().Teleport(gridCenter + new Vector3(radius * gridSize, -1f, Random.Range(-radius, radius + 1) * gridSize));
             e.GetComponent<AIDestinationSetter>().target = player.transform;
             e.GetComponentInChildren<EnemyHealth>().health = ((int)(scoreNum / scorePerAddedEnemyHealth) + 1);
             enemies.Add(e);
