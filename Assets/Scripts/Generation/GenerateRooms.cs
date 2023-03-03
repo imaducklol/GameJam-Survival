@@ -191,6 +191,15 @@ public class GenerateRooms : MonoBehaviour
             scoreNum += 10;
             scoreText.text = "Score: " + scoreNum.ToString();
             // Call mesh update function here can do
+            // AstarPath.active.Scan();
+        }
+    }
+
+    void LateUpdate()
+    {
+        if (sceneChange)
+        {
+            // Call mesh update function here can do
             AstarPath.active.Scan();
         }
     }
@@ -288,7 +297,7 @@ public class GenerateRooms : MonoBehaviour
             if(e.transform.position.x < gridCenter.x - ((radius + 0.5f) * gridSize))
             {
                 Vector3 newPos = e.transform.position;
-                newPos.x = gridCenter.x + (radius * gridSize);
+                newPos.x = 2 * gridCenter.x - newPos.x - gridSize;
                 moveEnemy(e, newPos);
             }
         }
@@ -327,7 +336,7 @@ public class GenerateRooms : MonoBehaviour
             if (e.transform.position.x > gridCenter.x + ((radius + 0.5f) * gridSize))
             {
                 Vector3 newPos = e.transform.position;
-                newPos.x = gridCenter.x - (radius * gridSize);
+                newPos.x = 2 * gridCenter.x - newPos.x + gridSize;
                 moveEnemy(e, newPos);
             }
         }
@@ -366,7 +375,7 @@ public class GenerateRooms : MonoBehaviour
             if (e.transform.position.z < gridCenter.z - ((radius + 0.5f) * gridSize))
             {
                 Vector3 newPos = e.transform.position;
-                newPos.z = gridCenter.z + (radius * gridSize);
+                newPos.z = 2 * gridCenter.z - newPos.z - gridSize;
                 moveEnemy(e, newPos);
             }
         }
@@ -405,7 +414,7 @@ public class GenerateRooms : MonoBehaviour
             if (e.transform.position.z > gridCenter.z + ((radius + 0.5f) * gridSize))
             {
                 Vector3 newPos = e.transform.position;
-                newPos.z = gridCenter.z - (radius * gridSize);
+                newPos.z = 2 * gridCenter.z - newPos.z + gridSize;
                 moveEnemy(e, newPos);
             }
         }
