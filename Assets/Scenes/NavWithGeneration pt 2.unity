@@ -229,7 +229,6 @@ GameObject:
   m_Component:
   - component: {fileID: 419302907}
   - component: {fileID: 419302906}
-  - component: {fileID: 419302908}
   m_Layer: 0
   m_Name: Generation
   m_TagString: Untagged
@@ -255,11 +254,12 @@ MonoBehaviour:
   wall: {fileID: 8930873865249337054, guid: 7898204b691bd4c19b0895a3886e7ddc, type: 3}
   wallWithDoor: {fileID: 67150838582911871, guid: 2bdbb077f9a0143c8b684582fcc63939, type: 3}
   enemy: {fileID: 3923578652827398850, guid: 0228894efb1bbc853b975192645f27e7, type: 3}
-  timePerAddedEnemyHealth: 2
+  timePerAddedEnemyHealth: 20
   score: {fileID: 0}
   gridSize: 4
   radius: 8
-  enemyChance: 1
+  enemyChance: 0.2
+  enemies: []
 --- !u!4 &419302907
 Transform:
   m_ObjectHideFlags: 0
@@ -275,19 +275,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &419302908
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 419302905}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 092310d14ae789bbe9f59689f48f1265, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  reScan: 0
 --- !u!1001 &646438474
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -378,7 +365,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1678315687034719220, guid: cda61ea72845dcb4d81d58a8a0a31c77, type: 3}
       propertyPath: projectilesPerSecond
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8704665550818725513, guid: cda61ea72845dcb4d81d58a8a0a31c77, type: 3}
       propertyPath: target
@@ -445,7 +432,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8883450946642771605, guid: 0082020dda351e281a0f6a08e54945a2, type: 3}
       propertyPath: data.dataString
-      value: UEsDBBQAAAgIAACAn+smWeePVgIAABQFAAALACQAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQF1VE1z2jAQ/SuMzk0GU1KS3lqHkB6SMKWdXHxZrDXWIEsefQRIhv/elWxjE6Yny2/fPr39sD+YULbG3GmzMII/aY7s+4iFM/sy6oOPuIeNVivxjh3nVXBXBhJEzm9wQhOehDSrK3RG5D/URgbymECvRKFNNecbTLV1luACpEUKGe1CtiLoY8T2bcKhfb6H5+hIpxyVQ3PJuhpfJ2dEr3IJVY08GO75yazLoFMkKiqm5QSFXEspbOuEuUMdK02htp7qIAIXQJVFD4FfotiUjl4mw+SXorAY0PH1TagODvfCUIsaXfZTN32rwG4bb28gfbjpNnpqRJ8uoldJDBdGV4/dvck4VORKkW9/wyEH6wZtHcL358a92oHcwlria4nqWS+M9opT0BkfUr3Fyf1A6lRbWmK+7XmN1w7s2L6+nNFgQMdY/D6VolrHLk0bYCV1bPhdyEFDo/lFjuNm2FaJ0ODir8U/sBmuUBt4EMY6CrUXqmBvrb0JVDaPTQvVeJdqo9AMFWpUIN1hSTrubIiXsf9nPUD4Wtrb21j3EXxKiXDPH48/hZZ6dxqXLfXuCW354p0UCvv+h8AzNSrVSjUbNiypS1t5U0A+SNt4wc+Xi3E+XX+74dMkuZskMIUrmN3Bze0avq5nRbKeTVjcPqGoTpDLxmjbHhqb6sUVbVr3ExktDNRx27mB3UK8V9r2TKEKvcoNonppFE7G0dAl9F3yORfUoBU6J1QcOPvImNT5Fnl2EspipfO9M5D1KhmrxZt2AclYGn8dGQvwaZmXBt8E7sLlndiRHf8BUEsDBBQAAAgIAACAn+vPl4XPbQAAAHgAAAAJACQAbWV0YS5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0Bq1YqSy0qzszPU7JSMNEz0jM011FQSi9KLMgoBooYgjilmSkgdrRSSopJkplpiomhoaWRYaJJom6iuWWiqUVSonGSeZphkrmRUixQfUllQapfYm4qRE9AYklGWmZeSmZeup57UWaKO8hopdhaAFBLAQItABQAAAgIAACAn+smWeePVgIAABQFAAALACQAAAAAAAAAAAAAAAAAAABncmFwaDAuanNvbgoAIAAAAAAAAQAYAACAPtXesZ0BAIA+1d6xnQEAgD7V3rGdAVBLAQItABQAAAgIAACAn+vPl4XPbQAAAHgAAAAJACQAAAAAAAAAAAAAAKMCAABtZXRhLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQFQSwUGAAAAAAIAAgC4AAAAWwMAAAAA
+      value: UEsDBBQAAAgIAACAn+ukKy5MVAIAABIFAAALACQAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQF1VE1z2jAQ/SuMziWDKTSht9YQ0gMJE9LJxZe1tcYaZMmjDz6S4b9Xkm1swvRk++3b1Xu7K38SJnSFmZFqqRhdSYrk54D4d/Jt0AWf8AhbKTbsA1vOO6Om8CQInFcwTDo88mlalmgUy36JLffkkQOtYLlU5YJuMZbaaAfnwDW6kJLGZwsHfQ7IsUk4Nc8P/xyc3VuGwqC6ZQ1Hd9EV0YqMQ1kh9YI7/qxNmNU04aw0DJ+fSc6ZbnQQc6qCzxgqbZ0LR6AMnK+gwPMLZNvCuI9xP/klzzV6dHQ39d7gNGfKNaiuS37Lumsl6F2tbA/c+pMegqa66OomOoxCOFeyfGrPjUbekClYtnuFUwba9Jrah+fXwq04AN9ByvG9QPEsl0paQV3QKOtTrcbxvFfq4i0uMNt1vFprC7ZsW91OqDeeczB/jDkr09ClSQ1suAwND0NC5UbzxykOe6GbSg71Kv5qfINtf4GawCNT2rhQc6Dw8lJplaeSRWiad2NNLJVA1a9QoQBuTmtXx1wN8Tb2/6xH8HelOb2JtVfgS0qAO/5o9CW0lofLuHQhDyvUxYs1nAns+u8Dz65RsRSi3rC+pTZtY1UOWS9taxm9Xi5C6ST9MaWTKJqNI5jAEO5nMH1I4Xt6n0fp/ZiE7WPC+QS+roU27XFjE11x4Tat/YUMlgqqsO1UwWHJPkqpOyYTudxkClG81BUuwlG5Q9y9pAvKXIM2aAwTYeDkMyFcZjukyaVQEpwujkZB0lVJSMX20ngkIXH4cSTEw5dlXivcMzz4w9tiZ3L+B1BLAwQUAAAICAAAgJ/rz5eFz20AAAB4AAAACQAkAG1ldGEuanNvbgoAIAAAAAAAAQAYAACAPtXesZ0BAIA+1d6xnQEAgD7V3rGdAatWKkstKs7Mz1OyUjDRM9IzNNdRUEovSizIKAaKGII4pZkpIHa0UkqKSZKZaYqJoaGlkWGiSaJuorlloqlFUqJxknmaYZK5kVIsUH1JZUGqX2JuKkRPQGJJRlpmXkpmXrqee1FmijvIaKXYWgBQSwECLQAUAAAICAAAgJ/rpCsuTFQCAAASBQAACwAkAAAAAAAAAAAAAAAAAAAAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQFQSwECLQAUAAAICAAAgJ/rz5eFz20AAAB4AAAACQAkAAAAAAAAAAAAAAChAgAAbWV0YS5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0BUEsFBgAAAAACAAIAuAAAAFkDAAAAAA==
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []

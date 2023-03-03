@@ -11,6 +11,7 @@ public class EnemyHealth : MonoBehaviour
     public int health;
     private float timer = 0;
     private PlayerController player;
+    private GenerateRooms generator;
     
     void Start()
     {
@@ -18,13 +19,22 @@ public class EnemyHealth : MonoBehaviour
         if(playerInScene != null) {
             player = playerInScene;
         }
+        
+        GenerateRooms generatorInScene = GameObject.Find("Generation").GetComponent<GenerateRooms>();
+        if(generatorInScene != null) {
+            generator = generatorInScene;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
         // destroy if health is zero
-        if (health < 1) Destroy(gameObject);
+        if (health < 1)
+        {
+            generator.enemies.Remove(transform.parent.gameObject);
+            Destroy(transform.parent.gameObject);
+        }
 
 
         timer += Time.deltaTime;
