@@ -67,7 +67,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: b5a63bddbd78032448d090b802eed6df, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -135,9 +135,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minLookAngleNorm: -80
   maxLookAngleNorm: 80
-  projectileVelocity: 5000
+  projectileVelocity: 1000
+  projectilesPerSecond: 3
+  regenPerSecond: 0.5
   movementVelocity: 0.2
-  lookVelocity: {x: 0, y: 0}
+  lookVelocity: {x: 0.2, y: 0.2}
+  startingHealth: 10
+  health: 0
+  bulletPrefab: {fileID: 7934871158455113265, guid: 6e9a63064676d0bfba8f04b3388a7e53, type: 3}
+  healthDisplay: {fileID: 0}
+  deathDisplay: {fileID: 0}
+  restartDisplay: {fileID: 0}
+  healthString: {fileID: 0}
 --- !u!114 &1678315687034719222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,7 +279,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 1
   updateDistance: 10
-  target: {fileID: 0}
+  target: {fileID: 1678315687034719219}
   graphIndex: 0
 --- !u!1 &1678315687122395887
 GameObject:
