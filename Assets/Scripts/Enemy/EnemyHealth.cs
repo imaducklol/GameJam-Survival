@@ -46,9 +46,6 @@ public class EnemyHealth : MonoBehaviour
             if (player.health > 0) player.healthString.text = "Health: " + player.health;
             else player.healthString.text = "Health: dead";
             
-            // Do death display if necessary
-            if (player.health < 1) player.Kill();
-            
             timer = 0;
         }
     }

@@ -299,6 +299,7 @@ public class GenerateRooms : MonoBehaviour
             {
                 Vector3 newPos = e.transform.position;
                 newPos.x = 2 * gridCenter.x - newPos.x - gridSize;
+                newPos.z = 2 * gridCenter.z - newPos.z;
                 moveEnemy(e, newPos);
             }
         }
@@ -329,6 +330,7 @@ public class GenerateRooms : MonoBehaviour
             {
                 Vector3 newPos = e.transform.position;
                 newPos.x = 2 * gridCenter.x - newPos.x + gridSize;
+                newPos.z = 2 * gridCenter.z - newPos.z;
                 moveEnemy(e, newPos);
             }
         }
@@ -358,6 +360,7 @@ public class GenerateRooms : MonoBehaviour
             if (e.transform.position.z < gridCenter.z - ((radius + 0.5f) * gridSize))
             {
                 Vector3 newPos = e.transform.position;
+                newPos.x = 2 * gridCenter.x - newPos.x;
                 newPos.z = 2 * gridCenter.z - newPos.z - gridSize;
                 moveEnemy(e, newPos);
             }
@@ -388,6 +391,7 @@ public class GenerateRooms : MonoBehaviour
             if (e.transform.position.z > gridCenter.z + ((radius + 0.5f) * gridSize))
             {
                 Vector3 newPos = e.transform.position;
+                newPos.x = 2 * gridCenter.x - newPos.x;
                 newPos.z = 2 * gridCenter.z - newPos.z + gridSize;
                 moveEnemy(e, newPos);
             }

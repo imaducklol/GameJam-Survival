@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviour
             regenTimer = 0;
         }
         
-        if(health < 1)
+        if(health == 0)
         {
             Kill();
         }
@@ -102,7 +102,7 @@ public class PlayerController : MonoBehaviour
         }
         else if(context.canceled)
         {
-            movement = Vector2.zero;
+            movement = Vector3.zero;
         }
     }
 
@@ -135,13 +135,15 @@ public class PlayerController : MonoBehaviour
         return -(input - 180f - Mathf.Sign(input - 180f) * 180f);
     }
 
-    public void Kill()
+    void Kill()
     {
         deathDisplay.SetActive(true);
         movementVelocity = .001f;
         projectileTimer = 0;
-        lookVelocity = new Vector2(lookVelocity.x * .5f, lookVelocity.y *.5f);
-        Debug.Log("Died");
+        lookVelocity *= 0.5f;
+        healthDisplay.SetActive(false);
+        health = -1;
+        Debug.Log("Dead");
         StartCoroutine(StartRestartTimer());
 
     }
