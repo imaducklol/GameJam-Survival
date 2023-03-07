@@ -260,7 +260,7 @@ MonoBehaviour:
   gridSize: 4
   radius: 8
   baseEnemyChance: 0.2
-  scalingEnemyChance: 10
+  scalingEnemyChance: 8
   enemies: []
 --- !u!4 &419302907
 Transform:

@@ -28,6 +28,9 @@ public class GenerateRooms : MonoBehaviour
     public float baseEnemyChance;
     public float scalingEnemyChance;
 
+    float averageSpeed = 4f;
+    float speedRadius = 0.5f;
+
     int size;
     Block inDirectionX;
     Block inDirectionZ;
@@ -394,7 +397,7 @@ public class GenerateRooms : MonoBehaviour
 
     void spawnEnemies(Vector3 pos)
     {
-        float enemySpawnChance = baseEnemyChance + (scalingEnemyChance / enemies.Count) * (scalingEnemyChance / enemies.Count);
+        float enemySpawnChance = baseEnemyChance + (scalingEnemyChance / (enemies.Count + 1)) * (scalingEnemyChance / (enemies.Count + 1));
         // Spawn enemies
         if (Random.value < enemySpawnChance)
         {
@@ -424,12 +427,12 @@ public class GenerateRooms : MonoBehaviour
         e.GetComponent<AIPath>().Teleport(pos);
         e.GetComponent<AIDestinationSetter>().target = player.transform;
         e.GetComponentInChildren<EnemyHealth>().health = (int)(scoreNum / scorePerAddedEnemyHealth) + 1;
+        e.GetComponent<AIPath>().maxSpeed = averageSpeed + ((2f * Random.value - 1) * speedRadius);
         enemies.Add(e);
     }
 
     void moveEnemy(GameObject e, Vector3 pos)
     {
         e.GetComponent<AIPath>().Teleport(pos);
-
     }
 }
