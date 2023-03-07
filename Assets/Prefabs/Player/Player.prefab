@@ -135,14 +135,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minLookAngleNorm: -80
   maxLookAngleNorm: 80
-  projectileVelocity: 5000
-  projectilesPerSecond: 0
-  regenPerSecond: 0
+  projectileVelocity: 1000
+  projectilesPerSecond: 3
+  regenPerSecond: 0.5
   movementVelocity: 0.2
-  lookVelocity: {x: 0, y: 0}
-  startingHealth: 0
+  lookVelocity: {x: 0.2, y: 0.2}
+  startingHealth: 10
   health: 0
-  bulletPrefab: {fileID: 0}
+  bulletPrefab: {fileID: 7934871158455113265, guid: 6e9a63064676d0bfba8f04b3388a7e53, type: 3}
   healthDisplay: {fileID: 0}
   deathDisplay: {fileID: 0}
   restartDisplay: {fileID: 0}
@@ -279,7 +279,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 1
   updateDistance: 10
-  target: {fileID: 0}
+  target: {fileID: 1678315687034719219}
   graphIndex: 0
 --- !u!1 &1678315687122395887
 GameObject:

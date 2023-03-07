@@ -362,14 +362,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 1678315687034719217, guid: cda61ea72845dcb4d81d58a8a0a31c77, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1678315687034719217, guid: cda61ea72845dcb4d81d58a8a0a31c77, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: b5a63bddbd78032448d090b802eed6df, type: 2}
     - target: {fileID: 1678315687034719219, guid: cda61ea72845dcb4d81d58a8a0a31c77, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -415,10 +407,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1678315687034719220, guid: cda61ea72845dcb4d81d58a8a0a31c77, type: 3}
-      propertyPath: bulletPrefab
-      value: 
-      objectReference: {fileID: 7934871158455113265, guid: 6e9a63064676d0bfba8f04b3388a7e53, type: 3}
-    - target: {fileID: 1678315687034719220, guid: cda61ea72845dcb4d81d58a8a0a31c77, type: 3}
       propertyPath: deathDisplay
       value: 
       objectReference: {fileID: 1934354104}
@@ -431,40 +419,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1938926645}
     - target: {fileID: 1678315687034719220, guid: cda61ea72845dcb4d81d58a8a0a31c77, type: 3}
-      propertyPath: lookVelocity.x
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1678315687034719220, guid: cda61ea72845dcb4d81d58a8a0a31c77, type: 3}
-      propertyPath: lookVelocity.y
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1678315687034719220, guid: cda61ea72845dcb4d81d58a8a0a31c77, type: 3}
-      propertyPath: regenPerSecond
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1678315687034719220, guid: cda61ea72845dcb4d81d58a8a0a31c77, type: 3}
       propertyPath: restartDisplay
       value: 
       objectReference: {fileID: 585594955}
-    - target: {fileID: 1678315687034719220, guid: cda61ea72845dcb4d81d58a8a0a31c77, type: 3}
-      propertyPath: startingHealth
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 1678315687034719220, guid: cda61ea72845dcb4d81d58a8a0a31c77, type: 3}
-      propertyPath: projectileVelocity
-      value: 1000
-      objectReference: {fileID: 0}
-    - target: {fileID: 1678315687034719220, guid: cda61ea72845dcb4d81d58a8a0a31c77, type: 3}
-      propertyPath: projectilesPerSecond
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 1678315687122395889, guid: cda61ea72845dcb4d81d58a8a0a31c77, type: 3}
       propertyPath: m_ClearFlags
       value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1678315687122395889, guid: cda61ea72845dcb4d81d58a8a0a31c77, type: 3}
-      propertyPath: field of view
-      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 1678315687122395889, guid: cda61ea72845dcb4d81d58a8a0a31c77, type: 3}
       propertyPath: m_BackGroundColor.b
@@ -478,10 +438,6 @@ PrefabInstance:
       propertyPath: m_BackGroundColor.r
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8704665550818725513, guid: cda61ea72845dcb4d81d58a8a0a31c77, type: 3}
-      propertyPath: target
-      value: 
-      objectReference: {fileID: 363630170}
     m_RemovedComponents: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 1678315687034719219, guid: cda61ea72845dcb4d81d58a8a0a31c77, type: 3}
@@ -946,10 +902,10 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 2
-  m_Range: 25
-  m_SpotAngle: 100
-  m_InnerSpotAngle: 40
+  m_Intensity: 3
+  m_Range: 150
+  m_SpotAngle: 179
+  m_InnerSpotAngle: 80
   m_CookieSize: 10
   m_Shadows:
     m_Type: 0
