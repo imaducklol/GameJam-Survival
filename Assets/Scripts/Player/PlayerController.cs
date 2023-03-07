@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
     public int health;
     private float regenTimer = 0;
     private float projectileTimer = 0;
+    private bool dead = false;
 
     [SerializeField] 
     private GameObject bulletPrefab;
@@ -68,7 +69,7 @@ public class PlayerController : MonoBehaviour
             regenTimer = 0;
         }
         
-        if(health == 0)
+        if(health <= 0 && !dead)
         {
             Kill();
         }
@@ -120,7 +121,7 @@ public class PlayerController : MonoBehaviour
 
     public void Fire(InputAction.CallbackContext context)
     {
-        if(context.started && projectileTimer > 1/projectilesPerSecond)
+        if(!dead && context.started && projectileTimer > 1/projectilesPerSecond)
         {
             projectileTimer = 0;
             Vector3 performanceCam = cam.transform.forward;
@@ -138,14 +139,12 @@ public class PlayerController : MonoBehaviour
     void Kill()
     {
         deathDisplay.SetActive(true);
-        movementVelocity = .001f;
+        movementVelocity = 0f;
         projectileTimer = 0;
         lookVelocity *= 0.5f;
         healthDisplay.SetActive(false);
-        health = -1;
-        Debug.Log("Dead");
+        dead = true;
         StartCoroutine(StartRestartTimer());
-
     }
     IEnumerator StartRestartTimer()
     {
