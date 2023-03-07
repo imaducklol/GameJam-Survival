@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 
 public class PlayerController : MonoBehaviour
 {
@@ -36,7 +37,9 @@ public class PlayerController : MonoBehaviour
     private GameObject bulletPrefab;
     public GameObject healthDisplay;
     public GameObject deathDisplay;
+    public GameObject restartDisplay;
     public TMPro.TMP_Text healthString;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -139,5 +142,17 @@ public class PlayerController : MonoBehaviour
         projectileTimer = 0;
         lookVelocity = new Vector2(lookVelocity.x * .5f, lookVelocity.y *.5f);
         Debug.Log("Died");
+        StartCoroutine(StartRestartTimer());
+
+    }
+    IEnumerator StartRestartTimer()
+    {
+        //yield on a new YieldInstruction that waits for 5 seconds.
+        yield return new WaitForSeconds(1.5f);
+
+        //After we have waited 5 seconds print the time again.
+        restartDisplay.gameObject.SetActive(true);
+        Debug.Log("Set Restart object to active");
+        Cursor.lockState = CursorLockMode.None;
     }
 }
