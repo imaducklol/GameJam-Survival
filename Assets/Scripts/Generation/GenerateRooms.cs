@@ -25,7 +25,8 @@ public class GenerateRooms : MonoBehaviour
     public float gridSize;
     public int radius;
 
-    public float enemyChance;
+    public float baseEnemyChance;
+    public float scalingEnemyChance;
 
     int size;
     Block inDirectionX;
@@ -52,6 +53,7 @@ public class GenerateRooms : MonoBehaviour
         }
 
         gridCenter = player.transform.position;
+        gridCenter.y = 0f;
 
         blockOptions = new int[numberOfOptions, 4] {
             { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 },
@@ -188,8 +190,6 @@ public class GenerateRooms : MonoBehaviour
         {
             scoreNum += 10;
             scoreText.text = "Score: " + scoreNum.ToString();
-            // Call mesh update function here can do
-            // AstarPath.active.Scan();
         }
     }
 
@@ -299,16 +299,7 @@ public class GenerateRooms : MonoBehaviour
                 moveEnemy(e, newPos);
             }
         }
-        // Spawn enemies
-        if(Random.value < enemyChance)
-        {
-            GameObject e = Instantiate(enemy);
-            //e.transform.position = gridCenter + new Vector3(radius * gridSize, 0f, Random.Range(-radius, radius + 1) * gridSize);
-            e.GetComponent<AIPath>().Teleport(gridCenter + new Vector3(radius * gridSize, -1f, Random.Range(-radius, radius + 1) * gridSize));
-            e.GetComponent<AIDestinationSetter>().target = player.transform;
-            e.GetComponentInChildren<EnemyHealth>().health = ((int)(scoreNum / scorePerAddedEnemyHealth) + 1);
-            enemies.Add(e);
-        }
+        spawnEnemies(gridCenter + new Vector3(radius * gridSize, 0f, Random.Range(-radius, radius + 1) * gridSize));
     }
 
     void addLastRow(Block[] row)
@@ -338,16 +329,7 @@ public class GenerateRooms : MonoBehaviour
                 moveEnemy(e, newPos);
             }
         }
-        // Spawn enemies
-        if (Random.value < enemyChance)
-        {
-            GameObject e = Instantiate(enemy);
-            //e.transform.position = gridCenter + new Vector3(-radius * gridSize, 0f, Random.Range(-radius, radius + 1) * gridSize);
-            e.GetComponent<AIPath>().Teleport(gridCenter + new Vector3(radius * gridSize, -1f, Random.Range(-radius, radius + 1) * gridSize));
-            e.GetComponent<AIDestinationSetter>().target = player.transform;
-            e.GetComponentInChildren<EnemyHealth>().health = ((int)(scoreNum / scorePerAddedEnemyHealth) + 1);
-            enemies.Add(e);
-        }
+        spawnEnemies(gridCenter + new Vector3(-radius * gridSize, 0f, Random.Range(-radius, radius + 1) * gridSize));
     }
 
     void addFirstColumn(Block[] col)
@@ -377,16 +359,7 @@ public class GenerateRooms : MonoBehaviour
                 moveEnemy(e, newPos);
             }
         }
-        // Spawn enemies
-        if (Random.value < enemyChance)
-        {
-            GameObject e = Instantiate(enemy);
-            //e.transform.position = gridCenter + new Vector3(Random.Range(-radius, radius + 1) * gridSize, 0f, radius * gridSize);
-            e.GetComponent<AIPath>().Teleport(gridCenter + new Vector3(radius * gridSize, -1f, Random.Range(-radius, radius + 1) * gridSize));
-            e.GetComponent<AIDestinationSetter>().target = player.transform;
-            e.GetComponentInChildren<EnemyHealth>().health = ((int)(scoreNum / scorePerAddedEnemyHealth) + 1);
-            enemies.Add(e);
-        }
+        spawnEnemies(gridCenter + new Vector3(Random.Range(-radius, radius + 1) * gridSize, 0f, radius * gridSize));
     }
 
     void addLastColumn(Block[] col)
@@ -416,16 +389,42 @@ public class GenerateRooms : MonoBehaviour
                 moveEnemy(e, newPos);
             }
         }
+        spawnEnemies(gridCenter + new Vector3(Random.Range(-radius, radius + 1) * gridSize, 0f, -radius * gridSize));
+    }
+
+    void spawnEnemies(Vector3 pos)
+    {
+        float enemySpawnChance = baseEnemyChance + (scalingEnemyChance / enemies.Count) * (scalingEnemyChance / enemies.Count);
         // Spawn enemies
-        if (Random.value < enemyChance)
+        if (Random.value < enemySpawnChance)
         {
-            GameObject e = Instantiate(enemy);
-            //e.transform.position = gridCenter + new Vector3(Random.Range(-radius, radius + 1) * gridSize, 0f, -radius * gridSize);
-            e.GetComponent<AIPath>().Teleport(gridCenter + new Vector3(radius * gridSize, -1f, Random.Range(-radius, radius + 1) * gridSize));
-            e.GetComponent<AIDestinationSetter>().target = player.transform;
-            e.GetComponentInChildren<EnemyHealth>().health = ((int)(scoreNum / scorePerAddedEnemyHealth) + 1);
-            enemies.Add(e);
+            createEnemy(pos);
         }
+        if (enemySpawnChance > 1)
+        {
+            createEnemy(pos);
+            if(enemySpawnChance > 2)
+            {
+                createEnemy(pos);
+                if(enemySpawnChance > 5)
+                {
+                    createEnemy(pos);
+                    if(enemySpawnChance > 25)
+                    {
+                        createEnemy(pos);
+                    }
+                }
+            }
+        }
+    }
+
+    void createEnemy(Vector3 pos)
+    {
+        GameObject e = Instantiate(enemy);
+        e.GetComponent<AIPath>().Teleport(pos);
+        e.GetComponent<AIDestinationSetter>().target = player.transform;
+        e.GetComponentInChildren<EnemyHealth>().health = (int)(scoreNum / scorePerAddedEnemyHealth) + 1;
+        enemies.Add(e);
     }
 
     void moveEnemy(GameObject e, Vector3 pos)

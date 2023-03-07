@@ -259,7 +259,8 @@ MonoBehaviour:
   score: {fileID: 0}
   gridSize: 4
   radius: 8
-  enemyChance: 0.2
+  baseEnemyChance: 0.2
+  scalingEnemyChance: 10
   enemies: []
 --- !u!4 &419302907
 Transform:
